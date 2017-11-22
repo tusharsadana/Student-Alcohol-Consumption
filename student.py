@@ -7,12 +7,13 @@ Created on Mon Nov 20 16:00:16 2017
 
 import pandas as pd
 
+
 dataset = pd.read_csv('st.csv')
-dl = range(1,26)
+dl = range(1,28)
 dl.remove(10)
 for i in range(29,33):
     dl.append(i)
-il = [26,27,28]
+il = [28]
 
 x= dataset.iloc[:,dl].values
 y= dataset.iloc[:, il ].values
@@ -49,7 +50,20 @@ x = x[:,1:]
 from sklearn.cross_validation import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2, random_state = 0)
 
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(x_train,y_train)
 
+y_pred = regressor.predict(x_test)
 
+from sklearn.preprocessing import PolynomialFeatures as pf
 
+poly_reg = pf(degree = 6)
+x_poly = poly_reg.fit_transform(x_train)
+poly_reg.fit(x_poly, y_train)
+
+lin_reg2= LinearRegression()
+lin_reg2.fit(x_poly, y_train)
+
+y_pred2 = lin_reg2.predict(poly_reg.fit_transform(x_test))
 
